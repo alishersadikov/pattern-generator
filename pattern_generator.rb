@@ -23,10 +23,6 @@ class Generator
     store_serial_numbers
   end
 
-  def total_count
-    pattern
-  end
-
   def letters
     ("A".."Z").to_a
   end
