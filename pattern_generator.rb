@@ -1,15 +1,3 @@
-# Pattern Generator
-#
-# We want to generate serial numbers for our products as they roll off the manufacturing line. Patterns for the numbers are five characters like XXNXN where X stands for an uppercase letter A-Z and N stands for a digit 0-9.
-#
-# Write a program which, given a pattern like XXNXN, can both:
-#
-# generate all possible serial numbers for that pattern
-# report out how many numbers were generated.
-# Extensions
-#
-# Can you also support patterns of any length?
-# Customers often confuse 0 and O, I and 1. Let's omit all four of those symbols from the generator.
 require 'pry'
 
 class Generator
@@ -20,6 +8,7 @@ class Generator
     @current_serial = ""
     @combinations = {}
     @counter = 1
+    @total_count = []
   end
 
   def store_serial_numbers
@@ -30,24 +19,38 @@ class Generator
       @combinations[@counter] = @current_serial
       @counter += 1
     end
+    return @combinations if @combinations.keys.last == 26 * 26
     store_serial_numbers
+  end
 
+  def total_count
+    pattern
+  end
+
+  def letters
+    ("A".."Z").to_a
+  end
+
+  def numbers
+    ("0".."9").to_a
   end
 
   def generate_a_serial_number
-    characters = pattern.chars
     sequence = []
-    characters.map do |char|
-      letters = ("A".."Z").to_a
-      numbers = ("0".."9").to_a
+    characters = pattern.chars
+    characters.each do |char|
       if char == "X"
-        sequence.push(letters[0])
+        @total_count.push(26)
+        sequence.push(letters.sample)
       elsif char == "N"
-        sequence.push(numbers[0])
+        @total_count.push(10)
+        sequence.push(numbers.sample)
       end
     end
     return sequence.join
   end
 end
 
-Generator.new("XXNXN").store_serial_numbers
+serials = Generator.new("XX").store_serial_numbers
+puts serials.inspect
+puts "# of possible combinations: {#{serials.keys.last}}"
